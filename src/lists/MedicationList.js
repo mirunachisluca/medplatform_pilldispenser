@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, ListItem, ListItemText, Paper } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 
 function MedicationList({ medications, client, time }) {
   const { MedicationTakenRequest } = require("../generated/pilldispenser_pb");
+  const { enqueueSnackbar } = useSnackbar();
 
   const deleteMedicationHandler = (event, item) => {
     event.preventDefault();
@@ -26,6 +28,15 @@ function MedicationList({ medications, client, time }) {
           );
         } else {
           console.log(response.getMessage());
+
+          enqueueSnackbar(response.getMessage(), {
+            variant: "success",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            autoHideDuration: 2000,
+          });
         }
       });
     }

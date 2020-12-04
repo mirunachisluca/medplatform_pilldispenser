@@ -1,12 +1,14 @@
-import logo from "./logo.svg";
+import { SnackbarProvider } from "notistack";
 import "./App.css";
 import { MedicationDispenser } from "./dispenser/MedicationDispenser";
 
 function App() {
   return (
-    <div className="App">
-      <MedicationDispenser />
-    </div>
+    <SnackbarProvider>
+      <div className="App">
+        <MedicationDispenser />
+      </div>
+    </SnackbarProvider>
   );
 }
 

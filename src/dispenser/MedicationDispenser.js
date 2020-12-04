@@ -1,7 +1,8 @@
 import React from "react";
 import { MedicationList } from "../lists/MedicationList";
 import { Paper } from "@material-ui/core";
-import { Clock } from "../Clock";
+import { Clock } from "../timer/Clock";
+import { useSnackbar } from "notistack";
 
 function MedicationDispenser() {
   const {
@@ -18,6 +19,7 @@ function MedicationDispenser() {
   const [client, setClient] = React.useState("");
   const [time, setTime] = React.useState(new Date());
   const [activeMedication, setActiveMedication] = React.useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   React.useEffect(() => {
     const dispenserClient = new PillDispenserClient(
@@ -51,6 +53,36 @@ function MedicationDispenser() {
       });
     }
   }, [client]);
+
+  // React.useEffect(() => {
+  //   if (client) {
+  //     const request = new MedicationPlanRequest();
+
+  //     request.setPatientid(34);
+
+  //     const currentTime = time.toLocaleTimeString().substring(0, 8);
+
+  //     if (currentTime === "13:18:00") {
+  //       client.getMedicationPlan(request, {}, (err, response) => {
+  //         if (err) {
+  //           console.log(
+  //             `Unexpected error for pillDispenser: code = ${err.code}` +
+  //               `, message = "${err.message}"`
+  //           );
+  //         } else {
+  //           const newData = response.getMedicationList().map((element) => {
+  //             return element.array;
+  //           });
+
+  //           setMedications({
+  //             isLoaded: true,
+  //             data: newData,
+  //           });
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, [client, time]);
 
   React.useEffect(() => {
     if (medications.isLoaded) {
@@ -90,6 +122,15 @@ function MedicationDispenser() {
             );
           } else {
             console.log(response.getMessage());
+
+            enqueueSnackbar(response.getMessage(), {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              autoHideDuration: 2000,
+            });
           }
         });
       }
